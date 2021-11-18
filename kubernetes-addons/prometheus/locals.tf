@@ -52,4 +52,11 @@ locals {
     local.default_prometheus_helm_app,
     var.prometheus_helm_chart
   )
+
+  argocd_gitops_config = {
+    enable             = true
+    serviceAccountName = var.service_account_amp_ingest_name
+    ampIngestRoleArn   = var.amp_ingest_role_arn
+    ampWorkspaceUrl    = local.amp_workspace_url
+  }
 }
