@@ -23,6 +23,9 @@ The following properties are made available for use when managing the add-on via
 
 ```
 prometheus = {
-  enable       = true
+  enable             = true
+  ampWorkspaceUrl    = "<workspace_url>"
+  roleArn            = "<role_arn>"
+  serviceAccountName = "<service_account_name>"
 }
 ```

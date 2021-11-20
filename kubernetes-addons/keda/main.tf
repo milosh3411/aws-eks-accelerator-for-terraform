@@ -59,7 +59,7 @@ resource "helm_release" "keda" {
 
   dynamic "set" {
     iterator = each_item
-    for_each = var.keda_create_irsa ? distinct(concat(local.irsa_set_values, local.keda_helm_app["set"])) : local.keda_helm_app["set"]
+    for_each = var.keda_create_irsa ? distinct(local.keda_helm_app["set"]) : local.keda_helm_app["set"]
 
     content {
       name  = each_item.value.name

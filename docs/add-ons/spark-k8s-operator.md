@@ -37,6 +37,6 @@ The following properties are made available for use when managing the add-on via
 
 ```
 sparkK8sOperator = {
-  enable       = true
+  enable = true
 }
 ```

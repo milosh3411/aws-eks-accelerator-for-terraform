@@ -1,8 +1,8 @@
 serviceAccounts:
   server:
     name: ${service_account_name}
-    annotations: 
-        eks.amazonaws.com/role-arn: ${amp_ingest_role_arn}
+    annotations:
+      eks.amazonaws.com/role-arn: ${role_arn}
 server:
   remoteWrite:
     - url: ${amp_workspace_url}
@@ -12,4 +12,3 @@ server:
         max_samples_per_send: 1000
         max_shards: 200
         capacity: 2500
-  

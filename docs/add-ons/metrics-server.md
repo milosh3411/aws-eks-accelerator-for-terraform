@@ -27,6 +27,6 @@ The following properties are made available for use when managing the add-on via
 
 ```
 metricsServer = {
-  enable       = true
+  enable = true
 }
 ```

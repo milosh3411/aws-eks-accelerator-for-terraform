@@ -32,10 +32,11 @@ Deploy KEDA with custom `values.yaml`
 
 ### GitOps Configuration 
 
-The following properties are made available for use when managing the add-on via GitOps 
+The following properties are made available for use when managing the add-on via GitOps. 
 
 ```
-agones = {
-  enable       = true
+keda = {
+  enable             = true
+  serviceAccountName = "<service_account_name>"
 }
 ```

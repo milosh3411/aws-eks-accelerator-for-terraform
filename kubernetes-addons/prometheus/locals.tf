@@ -5,9 +5,9 @@ locals {
 
   default_helm_values = [templatefile("${path.module}/values.yaml", {
     aws_region           = data.aws_region.current.name,
-    service_account_name = var.service_account_amp_ingest_name
-    amp_ingest_role_arn  = var.amp_ingest_role_arn
     amp_workspace_url    = local.amp_workspace_url
+    role_arn             = var.amp_ingest_role_arn
+    service_account_name = var.service_account_amp_ingest_name
   })]
 
   default_prometheus_helm_app = {
@@ -55,8 +55,8 @@ locals {
 
   argocd_gitops_config = {
     enable             = true
-    serviceAccountName = var.service_account_amp_ingest_name
-    ampIngestRoleArn   = var.amp_ingest_role_arn
     ampWorkspaceUrl    = local.amp_workspace_url
+    roleArn            = var.amp_ingest_role_arn
+    serviceAccountName = var.service_account_amp_ingest_name
   }
 }
