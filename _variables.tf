@@ -48,20 +48,23 @@ variable "terraform_version" {
   description = "Terraform Version"
 }
 
-# VPC Config for EKS Cluster
-variable "vpc_id" {
-  type        = string
-  description = "VPC id"
-}
-variable "private_subnet_ids" {
-  description = "list of private subnets Id's for the Worker nodes"
-  type        = list(string)
-}
-variable "public_subnet_ids" {
-  description = "list of private subnets Id's for the Worker nodes"
-  type        = list(string)
-  default     = []
-}
+# VPC Config for EKS Cluster - MOVED TO _variables_vpc.tf
+
+# variable "vpc_id" {
+#   type        = string
+#   description = "VPC id"
+# }
+# variable "private_subnet_ids" {
+#   description = "list of private subnets Id's for the Worker nodes"
+#   type        = list(string)
+# }
+# variable "public_subnet_ids" {
+#   description = "list of private subnets Id's for the Worker nodes"
+#   type        = list(string)
+#   default     = []
+# }
+
+
 # EKS CONTROL PLANE
 variable "create_eks" {
   type        = bool
