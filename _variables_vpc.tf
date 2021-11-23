@@ -29,7 +29,7 @@ variable "enable_private_subnets" {
   default     = true
 }
 
-variable "vpc_cidr_block" {
+variable "vpc_cidr" {
   type        = string
   default     = ""
   description = "VPC CIDR"

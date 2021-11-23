@@ -18,7 +18,23 @@
 
 locals {
 
-  tags = tomap({ "created-by" = var.terraform_version })
+  default_tags = tomap({
+    "created-by"      = var.terraform_version
+    "BUC"             = var.tag_buc
+    "SupportGroup"    = var.tag_support_group
+    "AppGroupEmail"   = var.tag_app_group_email
+    "EnvironmentType" = var.tag_environment_type
+    "CustomerCRMID"   = var.tag_customer_crmid
+  })
+
+  ec2_tags = tomap({
+    "SolutionCentralID" = var.tag_solution_central_id
+    "MaintenanceWindow" = var.tag_maintenance_window
+    "Tier"              = var.tag_tier
+    "SLA"               = var.tag_sla
+    "OnHours"           = var.tag_on_hours
+    "ExpirationDate"    = var.tag_on_hours
+  })
 
   ecr_image_repo_url = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com"
 
