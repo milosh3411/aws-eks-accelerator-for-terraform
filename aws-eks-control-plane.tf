@@ -76,35 +76,35 @@ module "aws_eks" {
 # AWS Managed Prometheus Module
 # ---------------------------------------------------------------------------------------------------------------------
 
-module "aws_managed_prometheus" {
-  count  = var.create_eks && var.aws_managed_prometheus_enable == true ? 1 : 0
-  source = "./modules/aws-managed-prometheus"
-
-  environment                     = var.environment
-  tenant                          = var.tenant
-  zone                            = var.zone
-  account_id                      = data.aws_caller_identity.current.account_id
-  region                          = data.aws_region.current.id
-  eks_cluster_id                  = module.aws_eks.cluster_id
-  eks_oidc_provider               = split("//", module.aws_eks.cluster_oidc_issuer_url)[1]
-  service_account_amp_ingest_name = local.service_account_amp_ingest_name
-  service_account_amp_query_name  = local.service_account_amp_query_name
-  amp_workspace_name              = var.aws_managed_prometheus_workspace_name
-}
-
-module "emr_on_eks" {
-  source = "./modules/emr-on-eks"
-
-  for_each = { for key, value in var.emr_on_eks_teams : key => value
-    if var.enable_emr_on_eks && length(var.emr_on_eks_teams) > 0
-  }
-
-  emr_on_eks_teams = each.value
-
-  eks_cluster_id = module.aws_eks.cluster_id
-  environment    = var.environment
-  tenant         = var.tenant
-  zone           = var.zone
-
-  depends_on = [module.aws_eks, kubernetes_config_map.aws_auth]
-}
+# module "aws_managed_prometheus" {
+#   count  = var.create_eks && var.aws_managed_prometheus_enable == true ? 1 : 0
+#   source = "./modules/aws-managed-prometheus"
+# 
+#   environment                     = var.environment
+#   tenant                          = var.tenant
+#   zone                            = var.zone
+#   account_id                      = data.aws_caller_identity.current.account_id
+#   region                          = data.aws_region.current.id
+#   eks_cluster_id                  = module.aws_eks.cluster_id
+#   eks_oidc_provider               = split("//", module.aws_eks.cluster_oidc_issuer_url)[1]
+#   service_account_amp_ingest_name = local.service_account_amp_ingest_name
+#   service_account_amp_query_name  = local.service_account_amp_query_name
+#   amp_workspace_name              = var.aws_managed_prometheus_workspace_name
+# }
+# 
+# module "emr_on_eks" {
+#   source = "./modules/emr-on-eks"
+# 
+#   for_each = { for key, value in var.emr_on_eks_teams : key => value
+#     if var.enable_emr_on_eks && length(var.emr_on_eks_teams) > 0
+#   }
+# 
+#   emr_on_eks_teams = each.value
+# 
+#   eks_cluster_id = module.aws_eks.cluster_id
+#   environment    = var.environment
+#   tenant         = var.tenant
+#   zone           = var.zone
+# 
+#   depends_on = [module.aws_eks, kubernetes_config_map.aws_auth]
+# }

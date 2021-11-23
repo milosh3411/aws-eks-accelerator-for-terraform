@@ -56,5 +56,5 @@ create_vpc_endpoints = true
 #---------------------------------------------------------#
 create_eks              = true
 kubernetes_version      = "1.21"
-endpoint_private_access = true
-endpoint_public_access  = true
+cluster_endpoint_private_access = true
+cluster_endpoint_public_access  = true
