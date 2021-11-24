@@ -48,23 +48,6 @@ variable "terraform_version" {
   description = "Terraform Version"
 }
 
-# VPC Config for EKS Cluster - MOVED TO _variables_vpc.tf
-
-# variable "vpc_id" {
-#   type        = string
-#   description = "VPC id"
-# }
-# variable "private_subnet_ids" {
-#   description = "list of private subnets Id's for the Worker nodes"
-#   type        = list(string)
-# }
-# variable "public_subnet_ids" {
-#   description = "list of private subnets Id's for the Worker nodes"
-#   type        = list(string)
-#   default     = []
-# }
-
-
 # EKS CONTROL PLANE
 variable "create_eks" {
   type        = bool
@@ -155,16 +138,8 @@ variable "self_managed_node_groups" {
   type        = any
   default     = {}
 }
-variable "enable_fargate" {
-  description = "Enable Fargate profiles"
-  type        = bool
-  default     = false
-}
-variable "fargate_profiles" {
-  description = "Fargate Profile configuration"
-  type        = any
-  default     = {}
-}
+
+
 
 # EKS WINDOWS SUPPORT
 variable "enable_windows_support" {
@@ -205,17 +180,6 @@ variable "aws_auth_additional_labels" {
 
 # KUBERNETES ADDONS VARIABLES
 
-variable "enable_emr_on_eks" {
-  type        = bool
-  default     = false
-  description = "Enabling EMR on EKS Config"
-}
-
-variable "emr_on_eks_teams" {
-  description = "EMR on EKS Teams configuration"
-  type        = any
-  default     = {}
-}
 #-----------CLUSTER AUTOSCALER-------------
 variable "cluster_autoscaler_enable" {
   type        = bool
@@ -227,27 +191,7 @@ variable "cluster_autoscaler_helm_chart" {
   default     = {}
   description = "Cluster Autoscaler Helm Chart Config"
 }
-#-----------PROMETHEUS-------------
-variable "aws_managed_prometheus_enable" {
-  type        = bool
-  default     = false
-  description = "Enable AWS Managed Prometheus service"
-}
-variable "aws_managed_prometheus_workspace_name" {
-  type        = string
-  default     = "aws-managed-prometheus-workspace"
-  description = "AWS Managed Prometheus WorkSpace Name"
-}
-variable "prometheus_enable" {
-  description = "Enable Community Prometheus Helm Addon"
-  type        = bool
-  default     = false
-}
-variable "prometheus_helm_chart" {
-  description = "Community Prometheus Helm Addon Config"
-  type        = any
-  default     = {}
-}
+
 #-----------METRIC SERVER-------------
 variable "metrics_server_enable" {
   type        = bool
@@ -271,18 +215,6 @@ variable "traefik_helm_chart" {
   description = "Traefik Helm Addon Config"
 }
 
-#-----------AGONES-------------
-variable "agones_enable" {
-  type        = bool
-  default     = false
-  description = "Enabling Agones Gaming Helm Chart"
-}
-
-variable "agones_helm_chart" {
-  type        = any
-  default     = {}
-  description = "Agones GameServer Helm chart config"
-}
 #-----------AWS LB Ingress Controller-------------
 variable "aws_lb_ingress_controller_enable" {
   type        = bool
@@ -305,39 +237,7 @@ variable "nginx_helm_chart" {
   type        = any
   default     = {}
 }
-#-----------SPARK K8S OPERATOR-------------
-variable "spark_on_k8s_operator_enable" {
-  type        = bool
-  default     = false
-  description = "Enabling Spark on K8s Operator on EKS Cluster"
-}
-variable "spark_on_k8s_operator_helm_chart" {
-  description = "Spark on K8s Operator Helm Chart Configuration"
-  type        = any
-  default     = {}
-}
-#-----------AWS FOR FLUENT BIT-------------
-variable "aws_for_fluentbit_enable" {
-  type        = bool
-  default     = false
-  description = "Enabling FluentBit Addon on EKS Worker Nodes"
-}
-variable "aws_for_fluentbit_helm_chart" {
-  type        = any
-  description = "Helm chart definition for aws_for_fluent_bit"
-  default     = {}
-}
-#-----------FARGATE FLUENT BIT-------------
-variable "fargate_fluentbit_enable" {
-  type        = bool
-  default     = false
-  description = "Enabling fargate_fluent_bit module on eks cluster"
-}
-variable "fargate_fluentbit_config" {
-  type        = any
-  description = "Fargate fluentbit configuration "
-  default     = {}
-}
+
 #-----------CERT MANAGER-------------
 variable "cert_manager_enable" {
   type        = bool
@@ -354,58 +254,4 @@ variable "windows_vpc_controllers_helm_chart" {
   type        = any
   description = "Windows VPC Controllers Helm chart configuration"
   default     = {}
-}
-#-----------AWS OPEN TELEMETRY ADDON-------------
-variable "aws_open_telemetry_enable" {
-  type        = bool
-  default     = false
-  description = "Enable AWS Open Telemetry Distro Addon "
-}
-variable "aws_open_telemetry_addon" {
-  type        = any
-  default     = {}
-  description = "AWS Open Telemetry Distro Addon Configuration"
-}
-#-----------ARGOCD ADDON-------------
-variable "argocd_enable" {
-  type        = bool
-  default     = false
-  description = "Enable ARGO CD Kubernetes Addon"
-}
-variable "argocd_helm_chart" {
-  type        = any
-  default     = {}
-  description = "ARGO CD Kubernetes Addon Configuration"
-}
-variable "argocd_applications" {
-  type        = any
-  default     = {}
-  description = "ARGO CD Applications config to bootstrap the cluster"
-}
-variable "argocd_manage_add_ons" {
-  type        = bool
-  default     = false
-  description = "Enables managing add-on configuration via ArgoCD"
-}
-
-#-----------KEDA ADDON-------------
-variable "keda_enable" {
-  type        = bool
-  default     = false
-  description = "Enable KEDA Event-based autoscaler for workloads on Kubernetes"
-}
-variable "keda_helm_chart" {
-  type        = any
-  default     = {}
-  description = "KEDA Event-based autoscaler Kubernetes Addon Configuration"
-}
-variable "keda_create_irsa" {
-  type        = bool
-  description = "Indicates if the add-on should create a IAM role + service account"
-  default     = true
-}
-variable "keda_irsa_policies" {
-  type        = list(string)
-  description = "Additional IAM policies for a IAM role for service accounts"
-  default     = []
 }

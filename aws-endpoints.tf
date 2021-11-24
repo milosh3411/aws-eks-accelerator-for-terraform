@@ -10,8 +10,8 @@ module "endpoints_interface" {
       service      = "s3"
       service_type = "Gateway"
       route_table_ids = flatten([
-        module.vpc.intra_route_table_ids,
-      module.vpc.private_route_table_ids])
+        module.aws_vpc.intra_route_table_ids,
+      module.aws_vpc.private_route_table_ids])
       tags = { Name = "s3-vpc-Gateway" }
     },
     /*

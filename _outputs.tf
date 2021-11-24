@@ -51,16 +51,6 @@ output "worker_security_group_id" {
   value       = module.aws_eks.worker_security_group_id
 }
 
-output "amp_work_id" {
-  description = "AWS Managed Prometheus workspace id"
-  value       = var.aws_managed_prometheus_enable ? module.aws_managed_prometheus[0].amp_workspace_id : "AMP not enabled"
-}
-
-output "amp_work_arn" {
-  description = "AWS Managed Prometheus workspace ARN"
-  value       = var.aws_managed_prometheus_enable ? module.aws_managed_prometheus[0].service_account_amp_ingest_role_arn : "AMP not enabled"
-}
-
 output "self_managed_node_group_iam_role_arns" {
   description = "IAM role arn's of self managed node groups"
   value       = var.create_eks && var.enable_self_managed_nodegroups ? values({ for nodes in sort(keys(var.self_managed_node_groups)) : nodes => join(",", module.aws_eks_self_managed_node_groups[nodes].self_managed_node_group_iam_role_arns) }) : []
@@ -71,10 +61,6 @@ output "managed_node_group_iam_role_arns" {
   value       = var.create_eks && var.enable_managed_nodegroups ? values({ for nodes in sort(keys(var.managed_node_groups)) : nodes => join(",", module.aws_eks_managed_node_groups[nodes].managed_nodegroup_iam_role_name) }) : []
 }
 
-output "fargate_profiles_iam_role_arns" {
-  description = "IAM role arn's for Fargate Profiles"
-  value       = var.create_eks && var.enable_fargate ? { for nodes in sort(keys(var.fargate_profiles)) : nodes => module.aws_eks_fargate_profiles[nodes].eks_fargate_profile_role_name } : null
-}
 
 output "managed_node_groups" {
   description = "Outputs from EKS Managed node groups "
@@ -84,11 +70,6 @@ output "managed_node_groups" {
 output "self_managed_node_groups" {
   description = "Outputs from EKS Self-managed node groups "
   value       = var.create_eks && var.enable_self_managed_nodegroups ? module.aws_eks_self_managed_node_groups.* : []
-}
-
-output "fargate_profiles" {
-  description = "Outputs from EKS Fargate profiles groups "
-  value       = var.create_eks && var.enable_fargate ? module.aws_eks_fargate_profiles.* : []
 }
 
 output "self_managed_node_group_aws_auth_config_map" {
@@ -106,17 +87,3 @@ output "managed_node_group_aws_auth_config_map" {
   value       = local.managed_node_group_aws_auth_config_map.*
 }
 
-output "fargate_profiles_aws_auth_config_map" {
-  description = "Fargate profiles AWS auth map"
-  value       = local.fargate_profiles_aws_auth_config_map.*
-}
-
-output "emr_on_eks_role_arn" {
-  description = "IAM execution role ARN for EMR on EKS"
-  value       = var.create_eks && var.enable_emr_on_eks ? values({ for nodes in sort(keys(var.emr_on_eks_teams)) : nodes => join(",", module.emr_on_eks[nodes].emr_on_eks_role_arn) }) : []
-}
-
-output "emr_on_eks_role_id" {
-  description = "IAM execution role ID for EMR on EKS"
-  value       = var.create_eks && var.enable_emr_on_eks ? values({ for nodes in sort(keys(var.emr_on_eks_teams)) : nodes => join(",", module.emr_on_eks[nodes].emr_on_eks_role_id) }) : []
-}

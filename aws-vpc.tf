@@ -1,6 +1,5 @@
 module "vpc_tags" {
-  enabled     = var.create_vpc == true ? true : false
-  source      = "./modules/aws-resource-label"
+  source      = "./modules/aws-resource-tags"
   tenant      = var.tenant
   environment = var.environment
   zone        = var.zone
@@ -13,7 +12,7 @@ module "aws_vpc" {
   version = "v3.2.0"
 
   create_vpc = var.create_vpc
-  name       = module.vpc-label.id
+  name       = module.vpc_tags.id
   cidr       = var.vpc_cidr
   azs        = data.aws_availability_zones.available.names
 
@@ -26,13 +25,13 @@ module "aws_vpc" {
   single_nat_gateway   = true
 
   public_subnet_tags = {
-    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
-    "kubernetes.io/role/elb"                      = "1"
+    "kubernetes.io/cluster/eks-cluster" = "shared"
+    "kubernetes.io/role/elb"            = "1"
   }
 
   private_subnet_tags = {
-    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
-    "kubernetes.io/role/internal-elb"             = "1"
+    "kubernetes.io/cluster/eks-cluster" = "shared"
+    "kubernetes.io/role/internal-elb"   = "1"
   }
 
 }

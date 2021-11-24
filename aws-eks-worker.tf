@@ -42,7 +42,7 @@ module "aws_eks_managed_node_groups" {
   cluster_security_group_id         = module.aws_eks.cluster_security_group_id
   cluster_primary_security_group_id = module.aws_eks.cluster_primary_security_group_id
 
-  tags = module.eks_tags.tags
+  tags = merge(module.eks_tags.tags,local.ec2_tags)
 
   depends_on = [module.aws_eks, kubernetes_config_map.aws_auth]
 
@@ -64,7 +64,7 @@ module "aws_eks_self_managed_node_groups" {
   eks_cluster_name  = module.aws_eks.cluster_id
   cluster_endpoint  = module.aws_eks.cluster_endpoint
   cluster_ca_base64 = module.aws_eks.cluster_certificate_authority_data
-  tags              = module.eks_tags.tags
+  tags              = merge(module.eks_tags.tags,local.ec2_tags)
 
   vpc_id             = local.vpc_id
   private_subnet_ids = local.private_subnet_ids
@@ -101,7 +101,7 @@ module "aws_eks_self_managed_node_groups" {
 # AWS EKS Add-ons (VPC CNI, CoreDNS, KubeProxy )
 # ---------------------------------------------------------------------------------------------------------------------
 module "aws_eks_addon" {
-  count = var.create_eks && var.enable_managed_nodegroups || var.create_eks && var.enable_self_managed_nodegroups || var.create_eks && var.enable_fargate ? 1 : 0
+  count = var.create_eks && var.enable_managed_nodegroups || var.create_eks && var.enable_self_managed_nodegroups ? 1 : 0
 
   source                = "./modules/aws-eks-addon"
   cluster_name          = module.aws_eks.cluster_id

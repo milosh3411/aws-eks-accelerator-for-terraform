@@ -64,7 +64,7 @@ enable_irsa = true
 
 
 # EKS cluster logs
-enabled_cluster_log_types    = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+cluster_enabled_log_types    = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 cluster_log_retention_period = 7
 
 # EKS managed addons (these are managed by AWS, other addons need to be deployed by helm charts)
@@ -116,7 +116,7 @@ kube_proxy_addon_version = "v1.20.4-eksbuild.2"
       disk_size      = 50
 
       # 4> Node Group network configuration
-      subnet_ids = local.private_subnet_ids # Define your private/public subnets list with comma seprated subnet_ids  = ['subnet1','subnet2','subnet3']
+      #subnet_ids = local.private_subnet_ids # Define your private/public subnets list with comma seprated subnet_ids  = ['subnet1','subnet2','subnet3']
 
       k8s_taints = []
 
@@ -174,7 +174,7 @@ kube_proxy_addon_version = "v1.20.4-eksbuild.2"
 
       }
 
-      subnet_ids  = local.private_subnet_ids        # Define your private/public subnets list with comma seprated subnet_ids  = ['subnet1','subnet2','subnet3']
+     # subnet_ids  = local.private_subnet_ids        # Define your private/public subnets list with comma seprated subnet_ids  = ['subnet1','subnet2','subnet3']
 
       create_worker_security_group = false # Creates a dedicated sec group for this Node Group
     }
@@ -185,81 +185,82 @@ kube_proxy_addon_version = "v1.20.4-eksbuild.2"
   #---------------------------------------
   # TRAEFIK INGRESS CONTROLLER HELM ADDON
   #---------------------------------------
-  traefik_ingress_controller_enable = false
-
-  # Optional Map value
-  traefik_helm_chart = {
-    name       = "traefik"                         # (Required) Release name.
-    repository = "https://helm.traefik.io/traefik" # (Optional) Repository URL where to locate the requested chart.
-    chart      = "traefik"                         # (Required) Chart name to be installed.
-    version    = "10.0.0"                          # (Optional) Specify the exact chart version to install. If this is not specified, the latest version is installed.
-    namespace  = "kube-system"                     # (Optional) The namespace to install the release into. Defaults to default
-    timeout    = "1200"                            # (Optional)
-    lint       = "true"                            # (Optional)
-    # (Optional) Example to show how to override values using SET
-    set = [{
-      name  = "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
-      value = "nlb"
-    }]
-    # (Optional) Example to show how to pass metrics-server-values.yaml
-    values = [templatefile("${path.module}/k8s_addons/traefik-values.yaml", {
-      operating_system = "linux"
-    })]
-  }
-
-  #---------------------------------------
-  # METRICS SERVER HELM ADDON
-  #---------------------------------------
-  metrics_server_enable = false
-
-  # Optional Map value
-  metrics_server_helm_chart = {
-    name       = "metrics-server"                                    # (Required) Release name.
-    repository = "https://kubernetes-sigs.github.io/metrics-server/" # (Optional) Repository URL where to locate the requested chart.
-    chart      = "metrics-server"                                    # (Required) Chart name to be installed.
-    version    = "3.5.0"                                             # (Optional) Specify the exact chart version to install. If this is not specified, the latest version is installed.
-    namespace  = "kube-system"                                       # (Optional) The namespace to install the release into. Defaults to default
-    timeout    = "1200"                                              # (Optional)
-    lint       = "true"                                              # (Optional)
-
-    # (Optional) Example to show how to pass metrics-server-values.yaml
-    values = [templatefile("${path.module}/k8s_addons/metrics-server-values.yaml", {
-      operating_system = "linux"
-    })]
-  }
-
-  #---------------------------------------
-  # CLUSTER AUTOSCALER HELM ADDON
-  #---------------------------------------
-  cluster_autoscaler_enable = false
-
-  # Optional Map value
-  cluster_autoscaler_helm_chart = {
-    name       = "cluster-autoscaler"                      # (Required) Release name.
-    repository = "https://kubernetes.github.io/autoscaler" # (Optional) Repository URL where to locate the requested chart.
-    chart      = "cluster-autoscaler"                      # (Required) Chart name to be installed.
-    version    = "9.10.7"                                  # (Optional) Specify the exact chart version to install. If this is not specified, the latest version is installed.
-    namespace  = "kube-system"                             # (Optional) The namespace to install the release into. Defaults to default
-    timeout    = "1200"                                    # (Optional)
-    lint       = "true"                                    # (Optional)
-
-    # (Optional) Example to show how to pass metrics-server-values.yaml
-    values = [templatefile("${path.module}/k8s_addons/cluster-autoscaler-vaues.yaml", {
-      operating_system = "linux"
-    })]
-  }
-
-  #---------------------------------------
-  # ENABLE NGINX
-  #---------------------------------------
-
-  nginx_ingress_controller_enable = false
-  # Optional nginx_helm_chart
-  nginx_helm_chart = {
-    name       = "ingress-nginx"
-    chart      = "ingress-nginx"
-    repository = "https://kubernetes.github.io/ingress-nginx"
-    version    = "3.33.0"
-    namespace  = "kube-system"
-    values     = [templatefile("${path.module}/k8s_addons/nginx-values.yaml", {})]
-  }
+#  traefik_ingress_controller_enable = false
+#
+#  # Optional Map value
+#  traefik_helm_chart = {
+#    name       = "traefik"                         # (Required) Release name.
+#    repository = "https://helm.traefik.io/traefik" # (Optional) Repository URL where to locate the requested chart.
+#    chart      = "traefik"                         # (Required) Chart name to be installed.
+#    version    = "10.0.0"                          # (Optional) Specify the exact chart version to install. If this is not specified, the latest version is installed.
+#    namespace  = "kube-system"                     # (Optional) The namespace to install the release into. Defaults to default
+#    timeout    = "1200"                            # (Optional)
+#    lint       = "true"                            # (Optional)
+#    # (Optional) Example to show how to override values using SET
+#    set = [{
+#      name  = "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
+#      value = "nlb"
+#    }]
+#    # (Optional) Example to show how to pass metrics-server-values.yaml
+#    values = [templatefile("${path.module}/k8s_addons/traefik-values.yaml", {
+#      operating_system = "linux"
+#    })]
+#  }
+#
+#  #---------------------------------------
+#  # METRICS SERVER HELM ADDON
+#  #---------------------------------------
+#  metrics_server_enable = false
+#
+#  # Optional Map value
+#  metrics_server_helm_chart = {
+#    name       = "metrics-server"                                    # (Required) Release name.
+#    repository = "https://kubernetes-sigs.github.io/metrics-server/" # (Optional) Repository URL where to locate the requested chart.
+#    chart      = "metrics-server"                                    # (Required) Chart name to be installed.
+#    version    = "3.5.0"                                             # (Optional) Specify the exact chart version to install. If this is not specified, the latest version is installed.
+#    namespace  = "kube-system"                                       # (Optional) The namespace to install the release into. Defaults to default
+#    timeout    = "1200"                                              # (Optional)
+#    lint       = "true"                                              # (Optional)
+#
+#    # (Optional) Example to show how to pass metrics-server-values.yaml
+#    values = [templatefile("${path.module}/k8s_addons/metrics-server-values.yaml", {
+#      operating_system = "linux"
+#    })]
+#  }
+#
+#  #---------------------------------------
+#  # CLUSTER AUTOSCALER HELM ADDON
+#  #---------------------------------------
+#  cluster_autoscaler_enable = false
+#
+#  # Optional Map value
+#  cluster_autoscaler_helm_chart = {
+#    name       = "cluster-autoscaler"                      # (Required) Release name.
+#    repository = "https://kubernetes.github.io/autoscaler" # (Optional) Repository URL where to locate the requested chart.
+#    chart      = "cluster-autoscaler"                      # (Required) Chart name to be installed.
+#    version    = "9.10.7"                                  # (Optional) Specify the exact chart version to install. If this is not specified, the latest version is installed.
+#    namespace  = "kube-system"                             # (Optional) The namespace to install the release into. Defaults to default
+#    timeout    = "1200"                                    # (Optional)
+#    lint       = "true"                                    # (Optional)
+#
+#    # (Optional) Example to show how to pass metrics-server-values.yaml
+#    values = [templatefile("${path.module}/k8s_addons/cluster-autoscaler-vaues.yaml", {
+#      operating_system = "linux"
+#    })]
+#  }
+#
+#  #---------------------------------------
+#  # ENABLE NGINX
+#  #---------------------------------------
+#
+#  nginx_ingress_controller_enable = false
+#  # Optional nginx_helm_chart
+#  nginx_helm_chart = {
+#    name       = "ingress-nginx"
+#    chart      = "ingress-nginx"
+#    repository = "https://kubernetes.github.io/ingress-nginx"
+#    version    = "3.33.0"
+#    namespace  = "kube-system"
+#    values     = [templatefile("${path.module}/k8s_addons/nginx-values.yaml", {})]
+#  }
+#

@@ -4,7 +4,8 @@ resource "aws_eks_node_group" "managed_ng" {
   node_group_name_prefix = local.managed_node_group["node_group_name"]
   #node_group_name = local.managed_node_group["node_group_name"] Optional
   node_role_arn = aws_iam_role.managed_ng.arn
-  subnet_ids    = local.managed_node_group["subnet_ids"]
+  #subnet_ids    = local.managed_node_group["subnet_ids"]
+  subnet_ids = var.private_subnet_ids
 
   scaling_config {
     desired_size = local.managed_node_group["desired_size"]

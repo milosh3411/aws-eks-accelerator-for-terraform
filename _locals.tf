@@ -79,33 +79,4 @@ locals {
     } if node.launch_template_os == "windows"
   ] : []
 
-  # Fargate node IAM Roles for aws-auth
-  fargate_profiles_aws_auth_config_map = var.enable_fargate == true ? [
-    for key, node in var.fargate_profiles : {
-      rolearn : "arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:role/${module.aws_eks.cluster_id}-${node.fargate_profile_name}"
-      username : "system:node:{{SessionName}}"
-      groups : [
-        "system:bootstrappers",
-        "system:nodes",
-        "system:node-proxier"
-      ]
-    }
-  ] : []
-
-  # EMR on EKS IAM Roles for aws-auth
-  emr_on_eks_config_map = var.enable_emr_on_eks == true ? [
-    {
-      rolearn : "arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:role/AWSServiceRoleForAmazonEMRContainers"
-      username : "emr-containers"
-      groups : []
-    }
-  ] : []
-
-  service_account_amp_ingest_name = format("%s-%s", module.aws_eks.cluster_id, "amp-ingest")
-  service_account_amp_query_name  = format("%s-%s", module.aws_eks.cluster_id, "amp-query")
-
-  # Configuration for managing add-ons via GitOps.
-  gitops_add_on_config = {
-    awsForFluentBit = var.aws_for_fluentbit_enable ? module.aws_for_fluent_bit[0].gitops_config : null
-  }
 }

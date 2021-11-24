@@ -74,3 +74,8 @@ data "aws_subnet_ids" "current_public" {
     values = ["1"]
   }
 }
+
+data "aws_security_group" "default" {
+  name   = "default"
+  vpc_id = module.aws_vpc.vpc_id
+}
