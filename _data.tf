@@ -44,3 +44,33 @@ data "http" "eks_cluster_readiness" {
   timeout        = 300
 
 }
+# In Dev account we start with an already provisioned VPC (by FCS team), but
+# in the Sandbox we need to provision the VPC ourselves. The following few lines
+# should make this TF configuration applicable in both cases by having the "current"
+# data sources ponting to either VPC created by FCS or VPC created by our aws_vpc module
+data "aws_vpc" "current" {
+  id = var.create_vpc == false ? var.vpc_id : module.aws_vpc.vpc_id
+}
+data "aws_subnet_ids" "current_private" {
+  vpc_id = var.create_vpc == false ? var.vpc_id : module.aws_vpc.vpc_id
+  filter {
+    name   = "tag:Name"
+    values = ["ambit-focus-nr-elb-snet-us-east-1a"] # name of private subnet in Dev
+  }
+  filter {
+    name   = "tag:kubernetes.io/role/internal-elb" # tag for private subnets created by vpc module
+    values = ["1"]
+  }
+}
+
+data "aws_subnet_ids" "current_public" {
+  vpc_id = var.create_vpc == false ? var.vpc_id : module.aws_vpc.vpc_id
+  filter {
+    name   = "tag:Name"
+    values = ["ambit-focus-snet-us-east-1a"] # name of public subnet in Dev
+  }
+  filter {
+    name   = "tag:kubernetes.io/role/elb" # tag for public subnets created by vpc module
+    values = ["1"]
+  }
+}

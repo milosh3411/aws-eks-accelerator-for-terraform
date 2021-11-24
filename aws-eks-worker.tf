@@ -34,9 +34,9 @@ module "aws_eks_managed_node_groups" {
   cluster_ca_base64 = module.aws_eks.cluster_certificate_authority_data
   cluster_endpoint  = module.aws_eks.cluster_endpoint
 
-  vpc_id             = var.vpc_id
-  private_subnet_ids = var.private_subnet_ids
-  public_subnet_ids  = var.public_subnet_ids
+  vpc_id             = local.vpc_id
+  private_subnet_ids = local.private_subnet_ids
+  public_subnet_ids  = local.public_subnet_ids
 
   worker_security_group_id          = module.aws_eks.worker_security_group_id
   cluster_security_group_id         = module.aws_eks.cluster_security_group_id
@@ -66,9 +66,9 @@ module "aws_eks_self_managed_node_groups" {
   cluster_ca_base64 = module.aws_eks.cluster_certificate_authority_data
   tags              = module.eks_tags.tags
 
-  vpc_id             = var.vpc_id
-  private_subnet_ids = var.private_subnet_ids
-  public_subnet_ids  = var.public_subnet_ids
+  vpc_id             = local.vpc_id
+  private_subnet_ids = local.private_subnet_ids
+  public_subnet_ids  = local.public_subnet_ids
 
   worker_security_group_id          = module.aws_eks.worker_security_group_id
   cluster_security_group_id         = module.aws_eks.cluster_security_group_id
@@ -83,19 +83,19 @@ module "aws_eks_self_managed_node_groups" {
 # ---------------------------------------------------------------------------------------------------------------------
 # FARGATE PROFILES
 # ---------------------------------------------------------------------------------------------------------------------
-module "aws_eks_fargate_profiles" {
-  source = "./modules/aws-eks-fargate-profiles"
-
-  for_each = { for k, v in var.fargate_profiles : k => v if var.enable_fargate && length(var.fargate_profiles) > 0 }
-
-  fargate_profile  = each.value
-  eks_cluster_name = module.aws_eks.cluster_id
-
-  tags = module.eks_tags.tags
-
-  depends_on = [module.aws_eks, kubernetes_config_map.aws_auth]
-
-}
+#module "aws_eks_fargate_profiles" {
+#  source = "./modules/aws-eks-fargate-profiles"
+#
+#  for_each = { for k, v in var.fargate_profiles : k => v if var.enable_fargate && length(var.fargate_profiles) > 0 }
+#
+#  fargate_profile  = each.value
+#  eks_cluster_name = module.aws_eks.cluster_id
+#
+#  tags = module.eks_tags.tags
+#
+#  depends_on = [module.aws_eks, kubernetes_config_map.aws_auth]
+#
+#}
 
 # ---------------------------------------------------------------------------------------------------------------------
 # AWS EKS Add-ons (VPC CNI, CoreDNS, KubeProxy )

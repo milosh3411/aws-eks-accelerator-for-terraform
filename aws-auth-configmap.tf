@@ -25,7 +25,7 @@ resource "kubernetes_config_map" "aws_auth" {
     labels = merge(
       {
         "app.kubernetes.io/managed-by" = "Terraform"
-        "terraform.io/module"          = "terraform-ssp-amazon-eks"
+        #        "terraform.io/module"          = "terraform-ssp-amazon-eks"
       },
       var.aws_auth_additional_labels
     )
@@ -37,8 +37,8 @@ resource "kubernetes_config_map" "aws_auth" {
         local.managed_node_group_aws_auth_config_map,
         local.self_managed_node_group_aws_auth_config_map,
         local.windows_node_group_aws_auth_config_map,
-        local.fargate_profiles_aws_auth_config_map,
-        local.emr_on_eks_config_map,
+        #        local.fargate_profiles_aws_auth_config_map,
+        #        local.emr_on_eks_config_map,
         var.map_roles,
       ))
     )

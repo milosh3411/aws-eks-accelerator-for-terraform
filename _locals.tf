@@ -36,6 +36,10 @@ locals {
     "ExpirationDate"    = var.tag_on_hours
   })
 
+  vpc_id             = data.aws_vpc.current.id
+  private_subnet_ids = data.aws_subnet_ids.current_private.ids
+  public_subnet_ids  = data.aws_subnet_ids.current_public.ids
+
   ecr_image_repo_url = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com"
 
   # Managed node IAM Roles for aws-auth
