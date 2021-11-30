@@ -11,6 +11,7 @@ locals {
     timeout                    = "600"
     create_namespace           = false
     set_sensitive              = null
+    set                        = null
     lint                       = false
     values                     = local.default_helm_values
     wait                       = true

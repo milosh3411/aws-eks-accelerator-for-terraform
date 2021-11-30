@@ -1,51 +1,100 @@
-/*
- * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: MIT-0
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify,
- * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+/*** FIS default Tags ***/
+variable "buc" {
+  description = "The Business Unit Code associated with the group responsible for the deployed asset."
+  default     = "4010.523420.0000..0000.0000.0000"
+}
 
-#  CLUSTER LABELS
-variable "org" {
-  type        = string
-  description = "tenant, which could be your organization name, e.g. aws'"
+variable "support_group" {
+  description = "The name of the group responsible for the deployed asset."
+  default     = "Ambit Operations"
+}
+
+variable "app_group_email" {
+  description = "The email address for the operations team responsible for the deployed asset."
+  default     = "Ambit.Ops.Support@fisglobal.com"
+}
+
+variable "environment_type" {
+  description = "The tier of environment for the application -- this is separate from the service level defined at the subscription level."
+  default     = "Dev"
+}
+
+variable "customer_crmid" {
+  description = "The end customer of the system and the CRM ID of the end customer of the system."
   default     = ""
 }
-variable "tenant" {
+
+variable "org" {
   type        = string
-  description = "Account Name or unique account unique id e.g., apps or management or aws007"
-  default     = "aws"
+  description = "your organization name, e.g. arp"
+  default     = "arp"
 }
-variable "environment" {
-  type        = string
-  default     = "preprod"
-  description = "Environment area, e.g. prod or preprod "
-}
-variable "zone" {
-  type        = string
-  description = "zone, e.g. dev or qa or load or ops etc..."
-  default     = "dev"
-}
-variable "tags" {
-  type        = map(string)
-  default     = {}
-  description = "Additional tags (e.g. `map('BusinessUnit`,`XYZ`)"
-}
+
 variable "terraform_version" {
   type        = string
   default     = "Terraform"
   description = "Terraform Version"
+}
+
+variable "zone" {
+  type        = string
+  description = "e.g. 'sandbox', 'sdl', 'production'"
+}
+
+variable "application" {
+  type        = string
+  description = "Application name"
+  default     = "focus"
+}
+
+/*** EC2 tags     ***/
+variable "expiration_date" {
+  default = "Never"
+}
+
+variable "solution_central_id" {
+  default = "15589"
+}
+
+variable "sla" {
+  default = "99.5"
+}
+
+variable "maintenance_window" {
+  default = "*/*/*/*/0"
+}
+
+variable "tier" {
+  default = "System"
+}
+
+variable "on_hours" {
+  default = "Always"
+}
+
+/*** VPC variables ***/
+variable "vpc_id" {
+  type        = string
+  description = "VPC id"
+  default     = ""
+}
+variable "private_subnet_ids" {
+  description = "list of private subnets Id's for the Worker nodes"
+  default     = []
+}
+variable "public_subnet_ids" {
+  description = "list of private subnets Id's for the Worker nodes"
+  default     = []
+}
+variable "create_vpc_endpoints" {
+  type        = bool
+  default     = false
+  description = "Create VPC endpoints for Private subnets"
+}
+
+variable "route_table_ids" {
+  description = "VPC route table IDs, required for creation of S3 gateway endpoint"
+  default     = []
 }
 
 # EKS CONTROL PLANE

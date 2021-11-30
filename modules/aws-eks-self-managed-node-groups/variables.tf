@@ -68,6 +68,11 @@ variable "tags" {
   default     = {}
 }
 
+variable "ec2_tags" {
+  description = "A map of tags to add to ec2 instances"
+  type        = map(string)
+  default     = {}
+}
 variable "path" {
   type        = string
   default     = "/"

@@ -33,9 +33,14 @@ resource "aws_launch_template" "managed_node_groups" {
     http_put_response_hop_limit = var.http_put_response_hop_limit
   }
 
+
+  tag_specifications {
+    resource_type = "volume"
+    tags          = local.common_tags
+  }
   tag_specifications {
     resource_type = "instance"
-    tags          = local.common_tags
+    tags          = merge(local.common_tags, var.ec2_tags)
   }
 
   network_interfaces {

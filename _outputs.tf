@@ -1,21 +1,3 @@
-/*
- * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: MIT-0
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify,
- * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 output "cluster_oidc_url" {
   description = "The URL on the EKS cluster OIDC Issuer"
   value       = var.create_eks ? split("//", module.aws_eks.cluster_oidc_issuer_url)[1] : "EKS Cluster not enabled"
@@ -50,27 +32,27 @@ output "worker_security_group_id" {
   description = "EKS Worker Security group ID created by EKS module"
   value       = module.aws_eks.worker_security_group_id
 }
+# TEMPORARY MASKED
+#output "self_managed_node_group_iam_role_arns" {
+#  description = "IAM role arn's of self managed node groups"
+#  value       = var.create_eks && var.enable_self_managed_nodegroups ? values({ for nodes in sort(keys(var.self_managed_node_groups)) : nodes => join(",", module.aws_eks_self_managed_node_groups[nodes].self_managed_node_group_iam_role_arns) }) : []
+#}
+#
+#output "managed_node_group_iam_role_arns" {
+#  description = "IAM role arn's of managed node groups"
+#  value       = var.create_eks && var.enable_managed_nodegroups ? values({ for nodes in sort(keys(var.managed_node_groups)) : nodes => join(",", module.aws_eks_managed_node_groups[nodes].managed_nodegroup_iam_role_name) }) : []
+#}
+#
+#
+#output "managed_node_groups" {
+#  description = "Outputs from EKS Managed node groups "
+#  value       = var.create_eks && var.enable_managed_nodegroups ? module.aws_eks_managed_node_groups.* : []
+#}
 
-output "self_managed_node_group_iam_role_arns" {
-  description = "IAM role arn's of self managed node groups"
-  value       = var.create_eks && var.enable_self_managed_nodegroups ? values({ for nodes in sort(keys(var.self_managed_node_groups)) : nodes => join(",", module.aws_eks_self_managed_node_groups[nodes].self_managed_node_group_iam_role_arns) }) : []
-}
-
-output "managed_node_group_iam_role_arns" {
-  description = "IAM role arn's of managed node groups"
-  value       = var.create_eks && var.enable_managed_nodegroups ? values({ for nodes in sort(keys(var.managed_node_groups)) : nodes => join(",", module.aws_eks_managed_node_groups[nodes].managed_nodegroup_iam_role_name) }) : []
-}
-
-
-output "managed_node_groups" {
-  description = "Outputs from EKS Managed node groups "
-  value       = var.create_eks && var.enable_managed_nodegroups ? module.aws_eks_managed_node_groups.* : []
-}
-
-output "self_managed_node_groups" {
-  description = "Outputs from EKS Self-managed node groups "
-  value       = var.create_eks && var.enable_self_managed_nodegroups ? module.aws_eks_self_managed_node_groups.* : []
-}
+#output "self_managed_node_groups" {
+#  description = "Outputs from EKS Self-managed node groups "
+#  value       = var.create_eks && var.enable_self_managed_nodegroups ? module.aws_eks_self_managed_node_groups.* : []
+#}
 
 output "self_managed_node_group_aws_auth_config_map" {
   description = "Self managed node groups AWS auth map"

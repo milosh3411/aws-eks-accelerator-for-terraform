@@ -57,6 +57,11 @@ resource "aws_launch_template" "self_managed_ng" {
     tags          = local.common_tags
   }
 
+  tag_specifications {
+    resource_type = "instance"
+    tags          = merge(local.common_tags, var.ec2_tags)
+  }
+
   depends_on = [
     aws_iam_role.self_managed_ng,
     aws_iam_instance_profile.self_managed_ng,

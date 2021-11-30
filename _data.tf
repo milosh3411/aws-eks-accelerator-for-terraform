@@ -1,21 +1,3 @@
-/*
- * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: MIT-0
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify,
- * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 data "aws_partition" "current" {}
 
 data "aws_caller_identity" "current" {}
@@ -44,38 +26,7 @@ data "http" "eks_cluster_readiness" {
   timeout        = 300
 
 }
-# In Dev account we start with an already provisioned VPC (by FCS team), but
-# in the Sandbox we need to provision the VPC ourselves. The following few lines
-# should make this TF configuration applicable in both cases by having the "current"
-# data sources ponting to either VPC created by FCS or VPC created by our aws_vpc module
-data "aws_vpc" "current" {
-  id = var.create_vpc == false ? var.vpc_id : module.aws_vpc.vpc_id
-}
-data "aws_subnet_ids" "current_private" {
-  vpc_id = var.create_vpc == false ? var.vpc_id : module.aws_vpc.vpc_id
-  filter {
-    name   = "tag:Name"
-    values = ["ambit-focus-nr-elb-snet-us-east-1a"] # name of private subnet in Dev
-  }
-  filter {
-    name   = "tag:kubernetes.io/role/internal-elb" # tag for private subnets created by vpc module
-    values = ["1"]
-  }
-}
-
-data "aws_subnet_ids" "current_public" {
-  vpc_id = var.create_vpc == false ? var.vpc_id : module.aws_vpc.vpc_id
-  filter {
-    name   = "tag:Name"
-    values = ["ambit-focus-snet-us-east-1a"] # name of public subnet in Dev
-  }
-  filter {
-    name   = "tag:kubernetes.io/role/elb" # tag for public subnets created by vpc module
-    values = ["1"]
-  }
-}
-
 data "aws_security_group" "default" {
   name   = "default"
-  vpc_id = module.aws_vpc.vpc_id
+  vpc_id = var.vpc_id
 }

@@ -1,44 +1,34 @@
-/*
- * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: MIT-0
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify,
- * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 locals {
 
+  /*----------------------------------------------------------------*/
+  //NAMING AND DEFAULT TAGS
+  /*----------------------------------------------------------------*/
+
+  name_prefix = join("-", [var.environment_type, var.org, var.application])
   default_tags = tomap({
-    "created-by"      = var.terraform_version
-    "BUC"             = var.tag_buc
-    "SupportGroup"    = var.tag_support_group
-    "AppGroupEmail"   = var.tag_app_group_email
-    "EnvironmentType" = var.tag_environment_type
-    "CustomerCRMID"   = var.tag_customer_crmid
+    /* FIS default tags*/
+    "BUC"             = var.buc
+    "SupportGroup"    = var.support_group
+    "AppGroupEmail"   = var.app_group_email
+    "EnvironmentType" = var.environment_type
+    "CustomerCRMID"   = var.customer_crmid
+    /* ARP additional default tags*/
+    "CreatedBy" = var.terraform_version
+    "Zone"      = var.zone
   })
+
+  /*----------------------------------------------------------------*/
+  // RESOURCE SPECIFIC TAGS
+  /*----------------------------------------------------------------*/
 
   ec2_tags = tomap({
-    "SolutionCentralID" = var.tag_solution_central_id
-    "MaintenanceWindow" = var.tag_maintenance_window
-    "Tier"              = var.tag_tier
-    "SLA"               = var.tag_sla
-    "OnHours"           = var.tag_on_hours
-    "ExpirationDate"    = var.tag_on_hours
+    "SolutionCentralID" = var.solution_central_id
+    "MaintenanceWindow" = var.maintenance_window
+    "Tier"              = var.tier
+    "SLA"               = var.sla
+    "OnHours"           = var.on_hours
+    "ExpirationDate"    = var.expiration_date
   })
-
-  vpc_id             = data.aws_vpc.current.id
-  private_subnet_ids = data.aws_subnet_ids.current_private.ids
-  public_subnet_ids  = data.aws_subnet_ids.current_public.ids
 
   ecr_image_repo_url = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com"
 

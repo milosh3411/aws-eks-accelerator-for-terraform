@@ -3,16 +3,14 @@ module "endpoints_interface" {
   version = "v3.2.0"
 
   create = var.create_vpc_endpoints
-  vpc_id = local.vpc_id
+  vpc_id = var.vpc_id
 
   endpoints = {
     s3 = {
-      service      = "s3"
-      service_type = "Gateway"
-      route_table_ids = flatten([
-        module.aws_vpc.intra_route_table_ids,
-      module.aws_vpc.private_route_table_ids])
-      tags = { Name = "s3-vpc-Gateway" }
+      service         = "s3"
+      service_type    = "Gateway"
+      route_table_ids = var.route_table_ids
+      tags            = local.default_tags
     },
     /*
     dynamodb = {
@@ -27,7 +25,7 @@ module "endpoints_interface" {
     },
     */
   }
-  depends_on = [module.aws_vpc]
+
 }
 
 module "vpc_endpoints_gateway" {
@@ -36,9 +34,9 @@ module "vpc_endpoints_gateway" {
 
   create = var.create_vpc_endpoints
 
-  vpc_id             = local.vpc_id
+  vpc_id             = var.vpc_id
   security_group_ids = [data.aws_security_group.default.id]
-  subnet_ids         = local.private_subnet_ids
+  subnet_ids         = var.private_subnet_ids
 
   endpoints = {
     aps-workspaces = {
@@ -115,9 +113,6 @@ module "vpc_endpoints_gateway" {
         },*/
   }
 
-  tags = merge(local.default_tags, {
-    Project  = "EKS"
-    Endpoint = "true"
-  })
-  depends_on = [module.aws_vpc]
+  tags = local.default_tags
+
 }
